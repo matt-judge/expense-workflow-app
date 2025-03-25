@@ -15,33 +15,33 @@
                 <flux:navbar.item icon="layout-grid" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>
                     {{ __('Dashboard') }}
                 </flux:navbar.item>
+
+                @if (auth()->user()->isAdmin())
+                    <flux:navbar.item icon="layout-grid" :href="route('expenses.admin')" :current="request()->routeIs('expenses.admin')" wire:navigate>
+                        {{ __('Approve Expenses') }}
+
+                        @livewire('expenses.pending-expense-count')
+                    </flux:navbar.item>
+
+                    <flux:navbar.item icon="layout-grid" :href="route('expenses.reports')" :current="request()->routeIs('expenses.reports')" wire:navigate>
+                        {{ __('Reporting') }}
+                    </flux:navbar.item>
+
+                @else
+
+                    <flux:navbar.item icon="layout-grid" :href="route('expenses.create')" :current="request()->routeIs('expenses.create')" wire:navigate>
+                        {{ __('Submit New Expenses') }}
+                    </flux:navbar.item>
+
+                    <flux:navbar.item icon="layout-grid" :href="route('expenses.index')" :current="request()->routeIs('expenses.index')" wire:navigate>
+                        {{ __('My Expense Requests') }}
+                    </flux:navbar.item>
+
+                @endif
+                
             </flux:navbar>
 
             <flux:spacer />
-
-            <flux:navbar class="mr-1.5 space-x-0.5 py-0!">
-                <flux:tooltip :content="__('Search')" position="bottom">
-                    <flux:navbar.item class="!h-10 [&>div>svg]:size-5" icon="magnifying-glass" href="#" :label="__('Search')" />
-                </flux:tooltip>
-                <flux:tooltip :content="__('Repository')" position="bottom">
-                    <flux:navbar.item
-                        class="h-10 max-lg:hidden [&>div>svg]:size-5"
-                        icon="folder-git-2"
-                        href="https://github.com/laravel/livewire-starter-kit"
-                        target="_blank"
-                        :label="__('Repository')"
-                    />
-                </flux:tooltip>
-                <flux:tooltip :content="__('Documentation')" position="bottom">
-                    <flux:navbar.item
-                        class="h-10 max-lg:hidden [&>div>svg]:size-5"
-                        icon="book-open-text"
-                        href="https://laravel.com/docs/starter-kits"
-                        target="_blank"
-                        label="Documentation"
-                    />
-                </flux:tooltip>
-            </flux:navbar>
 
             <!-- Desktop User Menu -->
             <flux:dropdown position="top" align="end">
@@ -102,18 +102,6 @@
                     {{ __('Dashboard') }}
                     </flux:navlist.item>
                 </flux:navlist.group>
-            </flux:navlist>
-
-            <flux:spacer />
-
-            <flux:navlist variant="outline">
-                <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                {{ __('Repository') }}
-                </flux:navlist.item>
-
-                <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits" target="_blank">
-                {{ __('Documentation') }}
-                </flux:navlist.item>
             </flux:navlist>
         </flux:sidebar>
 
