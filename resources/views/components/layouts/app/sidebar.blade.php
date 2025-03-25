@@ -12,22 +12,62 @@
             </a>
 
             <flux:navlist variant="outline">
-                <flux:navlist.group :heading="__('Platform')" class="grid">
-                    <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
+                <flux:navlist.group :heading="__('Quick Links')" class="grid">
+                    <flux:navlist.item 
+                        icon="home" 
+                        :href="route('dashboard')" 
+                        :current="request()->routeIs('dashboard')" 
+                        wire:navigate
+                    >
+                        {{ __('Dashboard') }}
+                    </flux:navlist.item>
+
+                    @if (auth()->user()->isAdmin())
+                        <flux:navlist.item 
+                            icon="currency-pound"
+                            class="flex items-center justify-between"
+                            :href="route('expenses.admin')" 
+                            :current="request()->routeIs('expenses.admin')" 
+                            wire:navigate
+                        >
+                            <div class="flex items-center">
+                                <span>{{ __('Approve Expenses') }}</span>
+                                @livewire('expenses.pending-expense-count')
+                            </div>
+
+                        </flux:navlist.item>
+
+                        <flux:navlist.item 
+                            icon="document-arrow-down" 
+                            :href="route('expenses.reports')" 
+                            :current="request()->routeIs('expenses.reports')" 
+                            wire:navigate
+                        >
+                            {{ __('Reporting') }}
+                        </flux:navlist.item>
+                    @else
+                        <flux:navlist.item 
+                            icon="plus" 
+                            :href="route('expenses.create')" 
+                            :current="request()->routeIs('expenses.create')" 
+                            wire:navigate
+                        >
+                            {{ __('Submit New Expenses') }}
+                        </flux:navlist.item>
+                        
+                        <flux:navlist.item 
+                            icon="list-bullet" 
+                            :href="route('expenses.index')" 
+                            :current="request()->routeIs('expenses.index')" 
+                            wire:navigate
+                        >
+                            {{ __('My Expense Requests') }}
+                        </flux:navlist.item>
+                    @endif
                 </flux:navlist.group>
             </flux:navlist>
 
             <flux:spacer />
-
-            <flux:navlist variant="outline">
-                <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
-                {{ __('Repository') }}
-                </flux:navlist.item>
-
-                <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits" target="_blank">
-                {{ __('Documentation') }}
-                </flux:navlist.item>
-            </flux:navlist>
 
             <!-- Desktop User Menu -->
             <flux:dropdown position="bottom" align="start">
