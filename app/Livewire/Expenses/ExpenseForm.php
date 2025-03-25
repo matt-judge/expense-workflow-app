@@ -12,7 +12,6 @@ class ExpenseForm extends Component
 {
     use WithFileUploads;
 
-    public $categories = [];
     public $description;
     public $category_id;
     public $amount;
@@ -21,7 +20,7 @@ class ExpenseForm extends Component
 
     protected $rules = [
         'description' => 'required|string',
-        'category_id' => 'required|exists:categories,id',
+        'category_id' => 'required|exists:expense_categories,id',
         'amount' => 'required|numeric|min:0',
         'receipt_image' => 'required|image|max:1024', // 1MB
     ];
@@ -50,7 +49,7 @@ class ExpenseForm extends Component
     public function render()
     {
         return view('livewire.expenses.expense-form', [
-            'categories' => ExpenseCategory::orderBy('name', 'asc')->get(),
+            'categories' => ExpenseCategory::with('category')->orderBy('name', 'asc')->get(),
         ]);
     }
 }

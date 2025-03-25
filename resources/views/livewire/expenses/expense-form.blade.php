@@ -1,4 +1,4 @@
-<div class="max-w-2xl mx-auto p-4 bg-gray-100 shadow-md rounded-lg">
+<div class="max-w-2xl mx-auto p-4 bg-gray-100 shadow-md rounded-lg grid grid-columns-4">
     <div class="mt-4">
         @if (session()->has('message'))
             <div class="p-4 bg-green-100 text-green-700 rounded-md">
@@ -18,13 +18,13 @@
 
         <div class="mb-4">
             <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
-            <textarea id="description" wire:model="description" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 bg-gray-100"></textarea>
+            <textarea id="description" wire:model="description" class="mt-1 block w-full rounded-md border border-gray-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 bg-gray-100"></textarea>
             @error('description') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
         <div class="mb-4">
             <label for="category_id" class="block text-sm font-medium text-gray-700">Category</label>
-            <select id="category_id" wire:model="category_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 bg-gray-100">
+            <select id="category_id" wire:model="category_id" class="mt-1 block w-full rounded-md border border-gray-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 bg-gray-100">
                 <option value="">Select a category</option>
                 @foreach($categories as $category)
                     <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -35,13 +35,14 @@
 
         <div class="mb-4">
             <label for="amount" class="block text-sm font-medium text-gray-700">Amount</label>
-            <input type="number" step="0.01" min="0" id="amount" wire:model="amount" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 bg-gray-100">
+            <input type="number" step="0.01" min="0" id="amount" wire:model="amount" class="mt-1 block w-full rounded-md border border-gray-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 bg-gray-100">
             @error('amount') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
         </div>
 
         <div class="mb-4">
             <label for="receipt_image" class="block text-sm font-medium text-gray-700">Receipt Image</label>
-            <input type="file" id="receipt_image" wire:model="receipt_image" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 bg-gray-100">
+            <input type="file" id="receipt_image" wire:model="receipt_image" class="mt-1 block w-full rounded-md border border-gray-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 p-2 bg-gray-100">
+            <div wire:loading wire:target="receipt_image">Uploading...</div>
             @error('receipt_image') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
 
             @if ($receipt_image)
@@ -52,7 +53,7 @@
         </div>
 
         <div class="flex justify-end">
-            <button type="submit" class="px-4 py-2 bg-indigo-600 text-white rounded-md shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Submit</button>
+            <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Submit</button>
         </div>
     </form>
 </div>

@@ -18,6 +18,24 @@ class Expense extends Model
         'receipt_image',
     ];
 
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+
+
+    protected $casts = [
+        'submitted_at' => 'datetime',
+        'approved_at' => 'datetime',
+        'rejected_at' => 'datetime'
+    ];
+
+    public function category()
+    {
+        return $this->belongsTo(ExpenseCategory::class, 'category_id');
+    }
+
     public function scopeIsPending()
     {
         return $this->where('status', 'pending');

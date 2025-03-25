@@ -1,3 +1,5 @@
 <x-layouts.app :title="__('Create Expense')">
-    @livewire('expenses.expense-form')
+    <div class="grid grid-columns-4 flex-start">
+        @livewire('expenses.expense-form')
+    </div>
 </x-layouts.app>
