@@ -67,6 +67,9 @@
                             @endif
                         @endif
                     </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Receipt Image
+                    </th>
                     @if (Auth::user()->isAdmin())
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Actions
@@ -85,11 +88,15 @@
                                 {{ ucfirst($expense->status) }}
                             </flux:badge>
                         </td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $expense->submitted_at->format('d F Y H:i:s') }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $expense->created_at->format('d F Y H:i:s') }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            @if ($expense->receipt_image)
+                                <img src="{{ asset('storage/' . $expense->receipt_image) }}" alt="Receipt Image" class="w-16 h-16 object-cover cursor-pointer" wire:click="$'showImage', '{{ $expense->receipt_image }}')">
+                            @endif
+                        </td>
                         @if (Auth::user()->isAdmin())
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                <button class="px-4 py-2 bg-green-500 text-white rounded-md">Approve</button>
-                                <button class="px-4 py-2 bg-red-500 text-white rounded-md">Reject</button>
+                                <a href="{{ route('expenses.manage', $expense->id) }}" class="px-4 py-2 bg-blue-500 text-white rounded-md">Review</a>
                             </td>
                         @endif
                     </tr>

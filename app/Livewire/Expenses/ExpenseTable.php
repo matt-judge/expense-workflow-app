@@ -4,8 +4,11 @@ namespace App\Livewire\Expenses;
 
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Mail\Expense\ExpenseApproved;
+use App\Mail\Expense\ExpenseRejected;
 use App\Models\Expense;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class ExpenseTable extends Component
 {
@@ -15,6 +18,8 @@ class ExpenseTable extends Component
     public $sortDirection = 'desc';
     public $title = '';
     public $body = '';
+
+    protected $listeners = ['showImage' => 'showImage'];
 
     public function sortBy($field)
     {
@@ -26,10 +31,27 @@ class ExpenseTable extends Component
         }
     }
 
+    public function showImage($imageUrl)
+    {
+        $this->showImage = true;
+        $this->imageUrl = $imageUrl;        
+    }
+
+
     public function render()
     {
-        $expenses = Expense::orderBy($this->sortField, $this->sortDirection)
-            ->paginate(10);
+        if (auth()->user()->isAdmin())
+        {
+            $expenses = Expense::isPending()
+                ->orderBy($this->sortField, $this->sortDirection)
+                ->paginate(10);
+        }
+        else 
+        {
+            $expenses = Expense::allUserExpenses()
+                ->orderBy($this->sortField, $this->sortDirection)
+                ->paginate(10);
+        }
 
         return view('livewire.expenses.expense-table', [
             'expenses' => $expenses,
