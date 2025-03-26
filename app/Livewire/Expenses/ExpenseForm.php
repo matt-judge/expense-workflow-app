@@ -9,6 +9,7 @@ use App\Models\ExpenseCategory;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Livewire\WithFileUploads;
+use Symfony\Component\HttpFoundation\Response;
 
 class ExpenseForm extends Component
 {
@@ -33,6 +34,10 @@ class ExpenseForm extends Component
 
     public function submit()
     {
+        if (!Auth::check()) {
+            abort(Response::HTTP_FORBIDDEN, 'You must be logged in to submit an expense.');
+        }
+
         $this->validate();
 
         $expense = new Expense();

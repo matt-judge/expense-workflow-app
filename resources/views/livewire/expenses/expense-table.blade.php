@@ -67,6 +67,9 @@
                             @endif
                         @endif
                     </th>
+                    <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                        Receipt Image
+                    </th>
                     @if (Auth::user()->isAdmin())
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Actions
@@ -86,10 +89,23 @@
                             </flux:badge>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $expense->submitted_at->format('d F Y H:i:s') }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            @if ($expense->receipt_image)
+                                <img src="{{ asset('storage/' . $expense->receipt_image) }}" alt="Receipt Image" class="w-16 h-16 object-cover cursor-pointer" @click="showImage = true">
+                                <div x-data="{ showImage: false }">
+                                    <div x-show="showImage" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75">
+                                        <div class="relative">
+                                            <img src="{{ asset('storage/' . $expense->receipt_image) }}" alt="Receipt Image" class="max-w-full max-h-full">
+                                            <button @click="showImage = false" class="absolute top-0 right-0 mt-2 mr-2 text-white">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
+                        </td>
                         @if (Auth::user()->isAdmin())
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                <button class="px-4 py-2 bg-green-500 text-white rounded-md">Approve</button>
-                                <button class="px-4 py-2 bg-red-500 text-white rounded-md">Reject</button>
+                                <button @click="if (confirm('Are you sure you want to approve this expense?')) { $wire.approve({{ $expense->id }}) }" class="px-4 py-2 bg-green-500 text-white rounded-md">Approve</button>
+                                <button @click="if (confirm('Are you sure you want to reject this expense?')) { $wire.reject({{ $expense->id }}) }" class="px-4 py-2 bg-red-500 text-white rounded-md">Reject</button>
                             </td>
                         @endif
                     </tr>
