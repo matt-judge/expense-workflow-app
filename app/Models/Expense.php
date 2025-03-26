@@ -36,9 +36,29 @@ class Expense extends Model
         return $this->belongsTo(ExpenseCategory::class, 'category_id');
     }
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function approver()
+    {
+        return $this->belongsTo(User::class, 'approver_id');
+    }
+
+    public function scopeAllUserExpenses()
+    {
+        return $this->where('user_id', auth()->id());
+    }
+
     public function scopeIsPending()
     {
         return $this->where('status', 'pending');
+    }
+
+    public function scopeIsPendingForUser()
+    {
+        return $this->where('status', 'pending')->where('user_id', auth()->id());
     }
 
     public function scopeIsApproved()

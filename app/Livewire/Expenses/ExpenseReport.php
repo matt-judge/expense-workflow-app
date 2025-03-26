@@ -3,7 +3,7 @@
 namespace App\Livewire\Expenses;
 
 use Livewire\Component;
-use App\Exports\ExpensesExport;
+use App\Exports\Expenses\ExpensesExport;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ExpenseReport extends Component
@@ -17,6 +17,6 @@ class ExpenseReport extends Component
 
     public function render()
     {
-        return view('livewire.expense-report');
+        return view('livewire.expenses.expense-report');
     }
 }

@@ -1,5 +1,5 @@
-<div class="max-w-7xl mx-auto py-4">
-    <div class="mt-4">
+<div class="max-w-7xl mr-auto py-4">
+    <div class="mt-4 mb-2">
         @if (session()->has('message'))
             <div class="p-4 bg-green-100 text-green-700 rounded-md">
                 {{ session('message') }}
@@ -9,7 +9,7 @@
 
     <h2 class="text-lg font-semibold">{{ $title }}</h2>
 
-    <div class="mt-4">
+    <div class="mt-4 mb-2">
         <p class="text-sm text-gray-600">{{ $body }}</p>
     </div>
 
@@ -80,8 +80,11 @@
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $expense->description }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $expense->category?->name }}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">£{{ number_format($expense->amount) }}</td>
-                        {{-- TODO: Add a status badge that changes color based on the status --}}
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ ucfirst($expense->status) }}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            <flux:badge class="expense-count-badge text-xs" color="{{ $this->getStatusColour($expense) }}" variant="pill">
+                                {{ ucfirst($expense->status) }}
+                            </flux:badge>
+                        </td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $expense->submitted_at->format('d F Y H:i:s') }}</td>
                         @if (Auth::user()->isAdmin())
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">

@@ -39,6 +39,23 @@ class ExpenseTable extends Component
     public function mount()
     {
         $this->title = (auth()->user()->isAdmin() ? 'All' : 'My') . ' Expenses';
-        $this->body = auth()->user()->isAdmin() ? 'All expenses submitted by all users.' : 'All expenses submitted by you.';
+        $this->body = auth()->user()->isAdmin() ? 'All expenses submitted by all users.' : 'Here you will find your expenses and the current status of them.';
+    }
+
+    public function getStatusColour(Expense $expense): string
+    {
+        if ($expense->status === 'pending') {
+            return 'yellow';
+        }
+
+        if ($expense->status === 'approved') {
+            return 'green';
+        }
+
+        if ($expense->status === 'rejected') {
+            return 'red';
+        }
+
+        return 'gray';
     }
 }
