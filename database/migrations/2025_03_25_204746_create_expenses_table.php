@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('expenses', function (Blueprint $table) {
             $table->id();
             $table->longText('description');
-            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            $table->foreignId('category_id')->constrained('expense_categories')->onDelete('cascade');
             $table->decimal('amount', 10, 2);
             $table->string('receipt_image')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');

@@ -3,16 +3,17 @@
 namespace App\Livewire\Expenses;
 
 use Livewire\Component;
+use App\Mail\Expense\ExpenseSubmitted;
 use App\Models\Expense;
 use App\Models\ExpenseCategory;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Livewire\WithFileUploads;
 
 class ExpenseForm extends Component
 {
     use WithFileUploads;
 
-    public $categories = [];
     public $description;
     public $category_id;
     public $amount;
@@ -21,9 +22,13 @@ class ExpenseForm extends Component
 
     protected $rules = [
         'description' => 'required|string',
-        'category_id' => 'required|exists:categories,id',
+        'category_id' => 'required|exists:expense_categories,id',
         'amount' => 'required|numeric|min:0',
         'receipt_image' => 'required|image|max:1024', // 1MB
+    ];
+
+    protected $messages = [
+        'category_id.required' => 'The category field is required.',
     ];
 
     public function submit()
@@ -41,6 +46,13 @@ class ExpenseForm extends Component
         }
 
         $expense->save();
+        $expense->refresh();
+
+        // Send email notification to admins
+        $recipients = env('EMAIL_RECIPIENT');
+        if (isset($recipients) && $recipients !== '') {
+            Mail::to($recipients)->send(new ExpenseSubmitted($expense));
+        }
 
         session()->flash('message', 'Expense submitted successfully.');
 
