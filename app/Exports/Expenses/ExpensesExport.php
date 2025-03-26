@@ -6,8 +6,9 @@ use App\Models\Expense;
 use Maatwebsite\Excel\Concerns\FromQuery;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithMapping;
 
-class ExpensesExport implements FromQuery, WithHeadings
+class ExpensesExport implements FromQuery, WithHeadings, WithMapping
 {
     use Exportable;
 
@@ -20,7 +21,7 @@ class ExpensesExport implements FromQuery, WithHeadings
 
     public function query()
     {
-        $query = Expense::query();
+        $query = Expense::query()->with(['category', 'user', 'approver']);
 
         if ($this->status) {
             $query->where('status', $this->status);
@@ -34,17 +35,36 @@ class ExpensesExport implements FromQuery, WithHeadings
         return [
             'ID',
             'Description',
-            'Category ID',
+            'Category',
             'Amount',
             'Receipt Image',
             'Status',
-            'User ID',
-            'Approver ID',
+            'User',
+            'Approver',
             'Submitted At',
             'Approved At',
             'Rejected At',
             'Created At',
             'Updated At',
+        ];
+    }
+
+    public function map($expense): array
+    {
+        return [
+            $expense->id,
+            $expense->description,
+            $expense->category ? $expense->category->name : '',
+            $expense->amount,
+            $expense->receipt_image,
+            $expense->status,
+            $expense->user ? $expense->user->name : '',
+            $expense->approver ? $expense->approver->name : '',
+            $expense->submitted_at,
+            $expense->approved_at,
+            $expense->rejected_at,
+            $expense->created_at,
+            $expense->updated_at,
         ];
     }
 }

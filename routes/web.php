@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ExpenseController;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 
@@ -23,6 +24,7 @@ Route::middleware(['auth'])->group(function () {
 
         Route::middleware(['admin'])->group(function () {
             Route::view('admin', 'expenses.admin')->name('expenses.admin');
+            Route::get('manage/{expense}', [ExpenseController::class, 'manage'])->name('expenses.manage');
             Route::view('reports', 'expenses.reports')->name('expenses.reports');
         });
     });

@@ -19,6 +19,8 @@ class ExpenseTable extends Component
     public $title = '';
     public $body = '';
 
+    protected $listeners = ['showImage' => 'showImage'];
+
     public function sortBy($field)
     {
         if ($this->sortField === $field) {
@@ -29,41 +31,12 @@ class ExpenseTable extends Component
         }
     }
 
-    public function approve(Expense $expense)
+    public function showImage($imageUrl)
     {
-        $expense->status = 'approved';
-        $expense->save();
-        $expense->refresh();
-
-        session()->flash('message', 'Expense approved.');
-
-        // Send email notification to employees
-        $recipients = env('EMAIL_RECIPIENT');
-        if (isset($recipients) && $recipients !== '') {
-            Mail::to($recipients)->send(new ExpenseApproved($expense));
-        }
-
-        // Refresh the list of expenses
-        $this->render();
+        $this->showImage = true;
+        $this->imageUrl = $imageUrl;        
     }
 
-    public function reject(Expense $expense)
-    {
-        $expense->status = 'rejected';
-        $expense->save();
-        $expense->refresh();
-
-        session()->flash('message', 'Expense rejected.');
-
-        // Send email notification to employees
-        $recipients = env('EMAIL_RECIPIENT');
-        if (isset($recipients) && $recipients !== '') {
-            Mail::to($recipients)->send(new ExpenseRejected($expense));
-        }
-
-        // Refresh the list of expenses
-        $this->render();
-    }
 
     public function render()
     {
